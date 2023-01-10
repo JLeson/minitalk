@@ -1,49 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   client.c                                           :+:      :+:    :+:   */
+/*   ft_strdup.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fsarkoh <fsarkoh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/01/09 16:52:51 by fsarkoh           #+#    #+#             */
-/*   Updated: 2023/01/10 16:50:06 by fsarkoh          ###   ########.fr       */
+/*   Created: 2022/10/11 13:52:14 by fsarkoh           #+#    #+#             */
+/*   Updated: 2022/10/26 17:13:21 by fsarkoh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <stdlib.h>
 #include "libft.h"
-#include <signal.h>
 
-static void	send_char(int pid, int c)
+char	*ft_strdup(const char *s1)
 {
-	int	biti;
-
-	biti = 0;
-	while (biti < 8)
-	{
-		kill(pid, SIGUSR1 + ((c >> biti) & 0b00000001));
-		biti++;
-		usleep(100);
-	}
-}
-
-static void	send_str(int pid, char *str)
-{	
+	char			*s1cpy;
 	unsigned int	offset;
-	unsigned int	sentch;
 
+	s1cpy = ft_calloc(ft_strlen(s1) + 1, sizeof(char));
+	if (!s1cpy)
+		return (NULL);
 	offset = 0;
-	sentch = 0;
-	while (*(str + offset))
+	while (*(s1 + offset))
 	{
-		send_char(pid, *(str + offset));
+		*(s1cpy + offset) = *(s1 + offset);
 		offset++;
 	}
-}
-
-int	main(int argc, char **argv)
-{
-	if (argc != 3 || !ft_strlen(*(argv + 2)))
-		return (1);
-	send_str(ft_atoi(*(argv + 1)), *(argv + 2));
-	return (0);
+	return (s1cpy);
 }

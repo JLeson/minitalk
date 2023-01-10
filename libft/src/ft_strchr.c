@@ -1,49 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   client.c                                           :+:      :+:    :+:   */
+/*   ft_strchr.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fsarkoh <fsarkoh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/01/09 16:52:51 by fsarkoh           #+#    #+#             */
-/*   Updated: 2023/01/10 16:50:06 by fsarkoh          ###   ########.fr       */
+/*   Created: 2022/10/10 15:34:48 by fsarkoh           #+#    #+#             */
+/*   Updated: 2022/10/26 17:12:54 by fsarkoh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
-#include <signal.h>
 
-static void	send_char(int pid, int c)
+char	*ft_strchr(const char *s, int c)
 {
-	int	biti;
-
-	biti = 0;
-	while (biti < 8)
-	{
-		kill(pid, SIGUSR1 + ((c >> biti) & 0b00000001));
-		biti++;
-		usleep(100);
-	}
-}
-
-static void	send_str(int pid, char *str)
-{	
 	unsigned int	offset;
-	unsigned int	sentch;
 
 	offset = 0;
-	sentch = 0;
-	while (*(str + offset))
+	if (!(char)c)
+		return ((char *)s + ft_strlen(s));
+	while (*(s + offset))
 	{
-		send_char(pid, *(str + offset));
+		if (*(s + offset) == (char)c)
+			return ((char *)s + offset);
 		offset++;
 	}
-}
-
-int	main(int argc, char **argv)
-{
-	if (argc != 3 || !ft_strlen(*(argv + 2)))
-		return (1);
-	send_str(ft_atoi(*(argv + 1)), *(argv + 2));
-	return (0);
+	return (NULL);
 }

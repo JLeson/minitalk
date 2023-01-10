@@ -1,49 +1,40 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   client.c                                           :+:      :+:    :+:   */
+/*   ft_atoi.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fsarkoh <fsarkoh@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/01/09 16:52:51 by fsarkoh           #+#    #+#             */
-/*   Updated: 2023/01/10 16:50:06 by fsarkoh          ###   ########.fr       */
+/*   Created: 2022/10/11 13:02:49 by fsarkoh           #+#    #+#             */
+/*   Updated: 2022/10/26 16:54:36 by fsarkoh          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
-#include <signal.h>
 
-static void	send_char(int pid, int c)
+int	ft_atoi(const char *str)
 {
-	int	biti;
-
-	biti = 0;
-	while (biti < 8)
-	{
-		kill(pid, SIGUSR1 + ((c >> biti) & 0b00000001));
-		biti++;
-		usleep(100);
-	}
-}
-
-static void	send_str(int pid, char *str)
-{	
 	unsigned int	offset;
-	unsigned int	sentch;
+	int				to;
+	int				sign;
 
 	offset = 0;
-	sentch = 0;
-	while (*(str + offset))
+	to = 0;
+	sign = 1;
+	while (ft_isspace(*(str + offset)))
+		offset++;
+	if (*(str + offset) == '-')
 	{
-		send_char(pid, *(str + offset));
+		sign = -1;
 		offset++;
 	}
-}
-
-int	main(int argc, char **argv)
-{
-	if (argc != 3 || !ft_strlen(*(argv + 2)))
-		return (1);
-	send_str(ft_atoi(*(argv + 1)), *(argv + 2));
-	return (0);
+	else if (*(str + offset) == '+')
+		offset++;
+	while (ft_isdigit(*(str + offset)))
+	{
+		to *= 10;
+		to += *(str + offset) - 48;
+		offset++;
+	}		
+	return (to * sign);
 }
